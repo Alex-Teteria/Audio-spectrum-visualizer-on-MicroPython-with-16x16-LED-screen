@@ -41,6 +41,14 @@ Calculation of the audio signal spectrum and its display on the WS2812B RGB LED 
 
 Зібрати схему та завантажити файли в мікроконтролер. Схема не потребує додаткових налаштувань.  
 
+| Файл | Призначення |
+| --- | --- |
+| spectrum_to_neo_512_16_v2.py | Основний код, для автоматичного виконання під час кожного включення слід перейменувати в main.py |
+| neo_matrix.py | Модуль для роботи з WS2816 LED панелями як з матрицями виду n-рядків, m-стовпців |
+| algorithms_fft.py | Модуль з функціями для FFT [algorithms](https://github.com/peterhinch/micropython-fourier) |
+
+###### [Top](./README.md#зміст)  
+
 
 
 
