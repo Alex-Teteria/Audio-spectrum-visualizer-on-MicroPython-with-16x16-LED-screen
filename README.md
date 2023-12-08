@@ -4,7 +4,7 @@ Calculation of the audio signal spectrum and its display on the WS2812B RGB LED 
 ## Зміст  
 
 1. [Огляд](./README.md#1-огляд)
-2. [Схема складання аналізатора](./README.md#2-Схема-складання-аналізатора)
+2. [Схема складання](./README.md#2-Схема-складання)
 3. [Реалізація на Pi Pico with RP2040](./README.md#3-Реалізація-на-Pi-Pico-with-RP2040)
 4. [Приклад відображення аудіосигналу](./README.md#4-Приклад-відображення-аудіосигналу)
 5. [Install](./README.md#5-install)
@@ -21,7 +21,7 @@ Calculation of the audio signal spectrum and its display on the WS2812B RGB LED 
 Спектральні коефіцієнти обчислюються через FFT. Величина масива вхідних відліків - 512.  
 Для розрахунку FFT використано алгоритм Кулі — Тьюкі, зокрема його реалізацію на MicroPython [algorithms](https://github.com/peterhinch/micropython-fourier). 
 
-## 2. Схема складання аналізатора
+## 2. Схема складання  
 
 ![Microphone_to_fft](https://github.com/Alex-Teteria/Audio-spectrum-analyzer-on-ESP32-with-16x16-LED-screen/assets/94607514/c6ebc0d4-dcde-469f-9ded-90e17a0b98d9)  
 Основні модулі:
