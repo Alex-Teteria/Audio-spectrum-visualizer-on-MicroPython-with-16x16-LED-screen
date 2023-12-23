@@ -1,26 +1,18 @@
 # spectrum_to_neo.py
-# v0.7
-# 12.12.2023
-# Обчислення FFT 
+# Author: Alex Teteria
+# v0.12
+# 21.12.2023
+# Обчислення fft, 512 відліків  
 # Виведення результату на LED-дисплей neo-16x16, 16 частотних смуг
 # Released under the MIT license.
 # реалізація на Pi Pico with RP2040
 #-----------------------------------------------------------------------
-# v0.1 додано пікові значення спектральних смуг та їх зміна із заниженою швидкістю
-#-----------------------------------------------------------------------
-# v0.2 додано поріг шумів та відображення спектра, коли рівень менше:
-# зменшуються рівні спектральних смуг на одиницю за кожну ітерацію цикла (кожен кадр)
-#-----------------------------------------------------------------------
-# v0.4 знаходження FFT в другому потоці
-#------------------------------------------------------------------------
-# v0.7 для FFT використано бібліотеку ulab
+# для fft використано бібліотеку ulab
 # змінено частоту CPU: 140МГц
+# частота дискретизації АЦП приблизно 39,6kHz (із затримкою 2uc при зчитуванні з АЦП)
 #--------------------------------------------------------------------------
-# v0.9 причина хаотичного зависання - зчитування з АЦП у другому потоці!
-# Тому fft та зчитування даних з АЦП - в основному потоці, а
 # вивід спектра на led у другому потоці
 #--------------------------------------------------------------------------
-# v12.0 рівень шуму - окремо по частотним діапазонам.
 # Починаючи з 5-ї гармоніки частотні діапазони розбито наближено до функції sqrt(2) ** x,
 # тобто кожних два діапазони - октава
 # -------------------------------------------------------------------------
@@ -60,7 +52,7 @@ class Nm():
         self.np.write()  
 
     def write_led(self, l):
-        global exit_request # прапорець роботи, необхідний для запуску функції у другому потоці
+        global exit_request # прапорець роботи другого потоку
         for row in range(self.n):
             for col in range(self.m):
                 self.np[self.koef_to_pix(row, col)] = l[row][col]
@@ -231,15 +223,11 @@ def main_run():
     gain = 20 # початкове значення коеф. підсилення, щоб вивести на led
     sensitivity = 0.002 # початкове значення чутливості
     spectrum = [0] * n_freq # масив рівнів спектру по смугах
-    
     while button_stop.value():
-#        tick_1 = time.ticks_us()
         for i in range(num_read):
             nums[i] = adc.read_u16()
             time.sleep_us(2)
-
         nums = list(ulab.utils.spectrogram(np.array(nums)))
-        
         gain, noise = sp.make_spectrum(nums, sensitivity, gain, spectrum)
         max_spectr = [max_level if level < max_level else level for max_level, level in zip(max_spectr, spectrum)]
         led = [list(row) for row in pattern] # копія шаблона (у тричі швидше ніж заново робити make_pattern())
@@ -248,18 +236,12 @@ def main_run():
         if not nums_level:
             nums_level = delay_max_level
             max_spectr = [level - 1 for level in max_spectr]
-        #    print(gain, sensitivity, nums_sens)
-        
         if not noise:
             sensitivity, nums_sens = sc.auto_sens_control(sensitivity, all_nothing, nums_sens, gain)
         _thread.start_new_thread(nm.write_led, (led,))
         exit_request = False
-#        nm.write_led(led)
-#        print(time.ticks_us() - tick_1)
-
     while not exit_request: # для виходу чекаємо поки не закінчиться виконання у другому потоці
         pass
-
     nm.clear()
 
 if __name__ == '__main__':
