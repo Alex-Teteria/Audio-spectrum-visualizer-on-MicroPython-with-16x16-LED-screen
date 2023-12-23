@@ -57,8 +57,9 @@ Calculation of the audio signal spectrum and its display on the WS2812B RGB LED 
 | --- | --- |
 | spectrum_to_neo_512_16_v2.py | Основний код для ESP-WROOM-32 |
 | spectrum_to_neo_512_16_Pi.py | Основний код для Pi Pico with RP2040 |
-| neo_matrix.py | Модуль для роботи з WS2816 LED панелями. |
+| neo_matrix.py | Модуль для роботи з WS2816 LED панелями |
 | algorithms_fft.py | Модуль з функціями для FFT [algorithms](https://github.com/peterhinch/micropython-fourier)  |
+| RPI_PICO.uf2 | MicroPython firmware with ulab included for Pi Pico |
 
 ###### [Top](./README.md#зміст)  
 
